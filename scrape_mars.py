@@ -48,6 +48,7 @@ def scrape():
     html_table = df.to_html()
     html_table.replace("\n","")
     df.to_html("table.html")
+
     # mars hemisprees
     url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     browser.visit(url)
@@ -57,6 +58,7 @@ def scrape():
     results = mars_soup.find_all("div",class_="description")
     base_url = "https://astrogeology.usgs.gov"
     hemisphere_image_urls = []
+    print(results)
     for result in results:
         try:
             img_dict = {}
@@ -69,10 +71,12 @@ def scrape():
             img_soup = bs(mars_html,"lxml")
             img = img_soup.find('div', class_='downloads').find('li').a['href']
             img_dict["img_url"]=img
+            print(img)
             hemisphere_image_urls.append(img_dict)
         except:
             continue
         browser.click_link_by_partial_href(result.a["href"])
+
     mars_dict = {
         "news_title":news_title,
         "news_p":news_p,
@@ -81,5 +85,5 @@ def scrape():
         "mars_table":html_table,
         "hemisphere_image_urls":hemisphere_image_urls
     }
-
     return mars_dict
+    
