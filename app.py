@@ -6,8 +6,11 @@ app=Flask(__name__)
 mongo = PyMongo(app)
 @app.route("/")
 def index():
-    mars_list = mongo.db.mars_list.find_one()
-    return render_template("index.html",mars_dict=mars_list)
+    try:
+        mars_list = mongo.db.mars_list.find_one()
+        return render_template("index.html",mars_dict=mars_list)
+    except:
+        return redirect("http://localhost:5000/scrape", code=302)
 
 @app.route("/scrape")
 def scrape():
